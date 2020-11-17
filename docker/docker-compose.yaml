@@ -1,0 +1,36 @@
+# example
+version: '2.3'
+services:
+
+  reverseproxy:
+    depends_on:
+      - application
+    image: nginx:latest
+    container_name: proxy
+    restart: always
+    environment:
+      DEFAULT_HOST: localhost
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "certs:/etc/nginx/certs"
+
+  application:
+    image: customjavaapp
+    container_name: springjava
+    restart: on-failure
+    environment:
+       JAVA_MIN_MEM:
+    ports:
+      - "8080:8080"
+
+ volumes:
+   certs:
+
+ networks:
+   proxy_default:
+     external: true
+
+# depends_on conditions - service_healthy
+# nginx config
